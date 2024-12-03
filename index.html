@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/hk-grotesk.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/hk-grotesk.min.css"
+    />
     <!-- <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css"> -->
 
     <style>
-        body {
-            font-family: 'HK Grotesk', sans-serif;
-        }
+      body {
+        font-family: "HK Grotesk", sans-serif;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="app"></div>
 
     <!-- <h1>React From base</h1> -->
@@ -27,62 +29,83 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script type="text/babel">
-        const rooteL = document.querySelector('#app');
-        const root = ReactDOM.createRoot(rooteL);
+      const rooteL = document.querySelector("#app");
+      const root = ReactDOM.createRoot(rooteL);
 
-        root.render(<Header bgColor='light'>
+      root.render(
+        <Header bgColor="light">
+          This is some text we Need to render
+          <span style={{ color: "wheat" }}>
             This is some text we Need to render
-            <span style={{ color: 'wheat' }}>This is some text we Need to render</span>
-        </Header>);
+          </span>
+        </Header>
+      );
 
-        // Header
+      // Header
 
-        function Header({ children, bgColor = 'light' }) {
-
-          const backgroundOptions = { red :'bg-red-500', blue: 'bg-blue-500', green :'bg-green-500', light:'bg-zinc-600'};
-
-            return (
-                <React.StrictMode>
-                  
-                    <header className={`${backgroundOptions[bgColor]} text-white text-4xl  py-6 px-8 border-b`}>
-                        <h1 className='font-bold'>{children}</h1>
-                    </header>
-                    <Main />
-                    </React.StrictMode>);
-                
-        }
-
-        // counter
-        function Counter() {
-            let[state, setState] = React.useState(0);
-            let [counter, setCounter] = React.useState(0);
+      function Header({ children, bgColor = "light" }) {
+        const backgroundOptions = {
+          red: "bg-red-500",
+          blue: "bg-blue-500",
+          green: "bg-green-500",
+          light: "bg-zinc-600",
+        };
 
         return (
-            <React.Fragment>
+          <React.StrictMode>
+            <header
+              className={`${backgroundOptions[bgColor]} text-white text-4xl  py-6 px-8 border-b`}
+            >
+              <h1 className="font-bold">{children}</h1>
+            </header>
+            <Main />
+          </React.StrictMode>
+        );
+      }
+
+      // counter
+      function Counter({ handleClick }) {
+        let [state, setState] = React.useState(0);
+        let [counter, setCounter] = React.useState(0);
+
+        function handleChange(operation = "+") {
+          if (operation === "+") {
+            setCounter((preval) => {
+              handleClick(preval + 1);
+              return preval + 1;
+            });
+          } else {
+            setCounter((preval) => {
+              handleClick(preval - 1);
+              return preval - 1;
+            });
+          }
+        }
+
+        return (
+          <React.Fragment>
             <div className="flex text-6xl border border-zinc-600 w-fit p-2 gap-3 rounded-lg mb-3">
               <button
                 className="bg-blue-300 rounded-sm"
-                onClick={() => setCounter((preVal) => preVal - 1)}
+                onClick={() => handleChange("-")}
+                disabled={counter === 0}
               >
                 -
               </button>
               <p>{counter}</p>
               <button
                 className="bg-blue-300 rounded-sm"
-                onClick={() => setCounter((preVal) => preVal + 1)}
+                onClick={() => handleChange("+")}
               >
                 +
               </button>
             </div>
-            <Grid limit={counter} />
           </React.Fragment>
-          )
-        }
-// grid 
+        );
+      }
+      // grid
 
-function Grid({limit = 1 }) {
-   
-
+      function Grid({ limit = 1 }) {
         const data = [
           {
             id: 1,
@@ -107,10 +130,10 @@ function Grid({limit = 1 }) {
             description: "A compiler for building user interfaces",
           },
         ];
-        
+
         return (
           <div className="flex flex-wrap gap-4">
-            {data.slice(0, limit  < 0 ? 0 : limit).map((currentObj) => {
+            {data.slice(0, limit < 0 ? 0 : limit).map((currentObj) => {
               return (
                 <div
                   key={currentObj.id}
@@ -123,27 +146,30 @@ function Grid({limit = 1 }) {
             })}
           </div>
         );
-
-       
       }
-        // main
-        function Main() {
-            return (
-                <main className="px-8 py-6 container">
-                    <h2 className="text-xl font-bold mb-3">Why? 🤔</h2>
-                    <p  className = 'mb-3'>
-                        React from base is a project that uses React without any other
-                        libraries or build tools. In-fact, it doesn't even have any{" "}
-                        <code className="font-monospace bg-zinc-300 rounded p-1">
-                            package.json
-                        </code>
-                    </p>
-                    <Counter />
-                    
-                </main>
-            );
-        }
-    </script>
-</body>
+      // main
+      function Main() {
+        const [size, setsize] = React.useState(0);
 
+        function handleClick(value) {
+          setsize(value);
+          // setsize(size + 1);
+        }
+        return (
+          <main className="px-8 py-6 container">
+            <h2 className="text-xl font-bold mb-3">Why? 🤔</h2>
+            <p className="mb-3">
+              React from base is a project that uses React without any other
+              libraries or build tools. In-fact, it doesn't even have any{" "}
+              <code className="font-monospace bg-zinc-300 rounded p-1">
+                package.json
+              </code>
+            </p>
+            <Counter handleClick={handleClick} />
+            <Grid limit={size} />
+          </main>
+        );
+      }
+    </script>
+  </body>
 </html>
