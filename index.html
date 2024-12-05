@@ -50,21 +50,31 @@
           green: "bg-green-500",
           light: "bg-zinc-600",
         };
-
+        const [title, setTitle] = React.useState();
         return (
           <React.StrictMode>
             <header
-              className={`${backgroundOptions[bgColor]} text-white text-4xl  py-6 px-8 border-b`}
-            >
-              <h1 className="font-bold">{children}</h1>
-            </header>
+            className={`${backgroundOptions[bgColor]} px-8 py-6 border-b`}
+          >
+            <h1 className="text-2xl font-semibold">
+              {children || "React from base"}
+            </h1>
+          </header>
+            <label htmlfor="title"> Title Change </label>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
             <Main />
           </React.StrictMode>
         );
       }
 
       // counter
-      function Counter({ handleClick }) {
+      function Counter({ handleClick, bgColor = "#000000" }) {
         let [state, setState] = React.useState(0);
         let [counter, setCounter] = React.useState(0);
 
@@ -84,7 +94,9 @@
 
         return (
           <React.Fragment>
-            <div className="flex text-6xl border border-zinc-600 w-fit p-2 gap-3 rounded-lg mb-3">
+            <div
+              className={`flex text-6xl border border-zinc-600 w-fit p-2 gap-3 rounded-lg mb-3 bg-[${bgColor}]`}
+            >
               <button
                 className="bg-blue-300 rounded-sm"
                 onClick={() => handleChange("-")}
@@ -107,14 +119,16 @@
 
       function Grid({ limit = 1 }) {
         const [data, setData] = React.useState([]);
-
         const [click, setClick] = React.useState(false);
+
         React.useEffect(() => {
-          fetch("https://dummyjson.com/products")
+          fetch(
+            "https://raw.githubusercontent.com/gliese-sketch/poketle/refs/heads/main/src/js/data.json"
+          )
             .then((res) => res.json())
             .then((data) => {
-              console.log(data.products);
-              setData(data.products);
+              console.log(data);
+              setData(data);
             });
         }, []);
 
@@ -146,16 +160,16 @@
         // ];
 
         return (
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-4 ">
             {data.slice(0, limit < 0 ? 0 : limit).map((currentObj) => {
               return (
                 <div
                   key={currentObj.id}
                   className="border border-zinc-800 rounded-lg p-4 w-48"
                 >
-                  <h2 className="text-2xl font-bold mb-2">
-                    {currentObj.title}
-                  </h2>
+                  <img src={currentObj.image} alt="" />
+                  <h2 className="text-2xl font-bold mb-2">{currentObj.name}</h2>
+
                   <p>{currentObj.description}</p>
                 </div>
               );
@@ -166,6 +180,7 @@
       // main
       function Main() {
         const [size, setsize] = React.useState(0);
+        const [bgColor, setBgColor] = React.useState("#000000");
 
         function handleClick(value) {
           setsize(value);
@@ -181,7 +196,13 @@
                 package.json
               </code>
             </p>
-            <Counter handleClick={handleClick} />
+            <Counter handleClick={handleClick} bgColor={bgColor} />
+            <input
+              type="color"
+              className="border"
+              onChange={(e) => setBgColor(e.target.value)}
+              value={bgColor}
+            />
             <Grid limit={size} />
           </main>
         );
